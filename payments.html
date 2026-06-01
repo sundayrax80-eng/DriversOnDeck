@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Pay Placement Fee | Drivers On Deck Recruiting</title><link rel="stylesheet" href="assets/styles.css?v=20260601-payments"><script defer src="assets/app.js?v=20260601-backend"></script></head>
+<body>
+  <header class="site-header"><nav class="nav"><a class="brand" href="index.html"><span class="brand-mark"><img src="assets/drivers-on-deck-logo.png" alt="Drivers On Deck Recruiting logo"></span><span>Drivers On Deck Recruiting</span></a><button class="menu-button" data-menu-button>Menu</button><div class="nav-links" data-nav-links><a href="services.html">Services</a><a href="pricing.html">Pricing</a><a href="payments.html">Pay Invoice</a><a href="carriers.html">For Carriers</a><a href="drivers.html">For Drivers</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="admin.html">Admin Login</a><a class="button primary" href="carriers.html">Request Drivers</a></div></nav></header>
+  <main>
+    <section class="page-title"><div class="section"><h1>Pay Placement Fee</h1><p>Use this portal to pay a placement fee or recruiting invoice after your carrier agreement or invoice has been issued.</p></div></section>
+    <section class="section form-shell">
+      <form data-payment-form>
+        <div class="success" tabindex="-1">Payment details saved. Continue through the secure payment link to complete payment.</div>
+        <fieldset>
+          <legend>Payment Details</legend>
+          <div class="form-grid">
+            <label class="field">Company name<input required name="company_name" autocomplete="organization"></label>
+            <label class="field">Contact email<input required type="email" name="email" autocomplete="email"></label>
+            <label class="field">Invoice or placement reference<input required name="invoice_reference" placeholder="Invoice #, driver name, or placement ID"></label>
+            <label class="field">Payment amount<input required type="number" min="1" step="0.01" name="amount" placeholder="1500.00"></label>
+            <label class="field full">Notes<textarea name="notes" placeholder="Optional notes about this payment"></textarea></label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Carrier Acknowledgment</legend>
+          <label class="check"><input required type="checkbox" name="payment_acknowledgment"> I understand this payment is for recruiting/placement services or an issued invoice. Hiring decisions and official driver qualification requirements remain the carrier/client’s responsibility.</label>
+        </fieldset>
+        <p class="payment-status hint" data-payment-status>Stripe is ready to connect. Add your Stripe Payment Link URL in <code>assets/app.js?v=20260601-backend</code> to enable live checkout.</p>
+        <button class="button primary" type="submit">Continue to Secure Payment</button>
+      </form>
+      <aside class="side-note">
+        <h3>Secure checkout setup</h3>
+        <p>This page is built for Stripe Payment Links. Once your Stripe account is ready, paste the live payment link into the site config and carriers can pay from here.</p>
+        <p><strong>Tip:</strong> Use the invoice or placement reference so payments are easy to match in your records.</p>
+        <p class="disclaimer" data-disclaimer></p>
+      </aside>
+    </section>
+  </main>
+  <footer class="footer"><div class="footer-inner"><div><strong>Drivers On Deck Recruiting</strong><p>Empty seats don’t pay. We help fill them.</p></div><p data-disclaimer></p></div></footer>
+</body>
+</html>

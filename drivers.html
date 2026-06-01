@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>CDL Driver Application | Drivers On Deck Recruiting</title><link rel="stylesheet" href="assets/styles.css?v=20260601-payments"><script defer src="assets/app.js?v=20260601-backend"></script></head>
+<body>
+  <header class="site-header"><nav class="nav"><a class="brand" href="index.html"><span class="brand-mark"><img src="assets/drivers-on-deck-logo.png" alt="Drivers On Deck Recruiting logo"></span><span>Drivers On Deck Recruiting</span></a><button class="menu-button" data-menu-button>Menu</button><div class="nav-links" data-nav-links><a href="services.html">Services</a><a href="pricing.html">Pricing</a><a href="payments.html">Pay Invoice</a><a href="carriers.html">For Carriers</a><a href="drivers.html">For Drivers</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="admin.html">Admin Login</a><a class="button primary" href="carriers.html">Request Drivers</a></div></nav></header>
+  <main>
+    <section class="page-title"><div class="section"><h1>CDL Driver Interest Form</h1><p>Tell us what you drive, where you want to run, and what kind of schedule works for you.</p></div></section>
+    <section class="section form-shell">
+      <form data-lead-form="driver">
+        <div class="success" tabindex="-1">Thanks. Your driver form is in. If there’s a carrier opportunity that lines up with your experience, we may reach out.</div>
+        <fieldset><legend>Contact Information</legend><div class="form-grid">
+          <label class="field">Full legal name<input required name="full_name"></label>
+          <label class="field">Preferred name<input name="preferred_name"></label>
+          <label class="field">Phone<input required type="tel" name="phone"></label>
+          <label class="field">Email<input required type="email" name="email"></label>
+          <label class="field">City<input required name="city"></label>
+          <label class="field">State<input required name="state" maxlength="2"></label>
+          <label class="field">ZIP code<input required name="zip"></label>
+        </div></fieldset>
+        <fieldset><legend>License and Experience</legend><div class="form-grid">
+          <label class="field">CDL class<select required name="cdl_class"><option value="">Select</option><option>Class A</option><option>Class B</option><option>Permit</option><option>Other</option></select></label>
+          <label class="field">CDL issuing state<input required name="cdl_state" maxlength="2"></label>
+          <label class="field">CDL expiration date<input required type="date" name="cdl_expiration_date"></label>
+          <label class="field">Medical card expiration date<input required type="date" name="medical_card_expiration_date"></label>
+          <label class="field">Years of CDL experience<input required name="years_experience"></label>
+          <label class="field">Transmission restriction<select required name="transmission_restriction"><option value="">Select</option><option>Automatic only</option><option>Manual capable</option><option>Not sure</option></select></label>
+          <label class="field full">Endorsements<div class="checks"><label class="check"><input type="checkbox" name="endorsements" value="Hazmat"> Hazmat</label><label class="check"><input type="checkbox" name="endorsements" value="Tanker"> Tanker</label><label class="check"><input type="checkbox" name="endorsements" value="Doubles/Triples"> Doubles/Triples</label><label class="check"><input type="checkbox" name="endorsements" value="Passenger"> Passenger</label><label class="check"><input type="checkbox" name="endorsements" value="TWIC"> TWIC</label><label class="check"><input type="checkbox" name="endorsements" value="None"> None</label><label class="check"><input type="checkbox" name="endorsements" value="Other"> Other</label></div></label>
+          <label class="field full">Equipment experience<div class="checks"><label class="check"><input type="checkbox" name="equipment_experience" value="Dump"> Dump</label><label class="check"><input type="checkbox" name="equipment_experience" value="Flatbed"> Flatbed</label><label class="check"><input type="checkbox" name="equipment_experience" value="Dry Van"> Dry Van</label><label class="check"><input type="checkbox" name="equipment_experience" value="Reefer"> Reefer</label><label class="check"><input type="checkbox" name="equipment_experience" value="Tanker"> Tanker</label><label class="check"><input type="checkbox" name="equipment_experience" value="Container"> Container</label><label class="check"><input type="checkbox" name="equipment_experience" value="Hotshot"> Hotshot</label><label class="check"><input type="checkbox" name="equipment_experience" value="Box Truck"> Box Truck</label><label class="check"><input type="checkbox" name="equipment_experience" value="Other"> Other</label></div></label>
+        </div></fieldset>
+        <fieldset><legend>Work Preferences</legend><div class="form-grid">
+          <label class="field">Route preference<select required name="route_preference"><option value="">Select</option><option>Local</option><option>Regional</option><option>Dedicated</option><option>OTR</option></select></label>
+          <label class="field">Desired pay<input required name="desired_pay"></label>
+          <label class="field">Desired schedule/home time<input required name="desired_schedule"></label>
+          <label class="field">Availability/start date<input required type="date" name="availability_date"></label>
+          <label class="field full">Accident history notes<textarea required name="accident_history_notes"></textarea></label>
+          <label class="field full">Violation history notes<textarea required name="violation_history_notes"></textarea></label>
+          <label class="field full">Last 3 employers, optional<textarea name="employment_history_notes"></textarea></label>
+          <label class="field">Upload CDL copy<input type="file" name="uploaded_cdl_url"></label>
+          <label class="field">Upload medical card<input type="file" name="uploaded_medical_card_url"></label>
+          <label class="field">Upload resume<input type="file" name="uploaded_resume_url"></label>
+        </div></fieldset>
+        <fieldset><legend>Consent</legend><label class="check"><input required type="checkbox" name="consent_to_share"> I allow Drivers On Deck Recruiting to share my driver profile with potential carrier clients.</label><label class="check"><input required type="checkbox" name="employment_disclaimer"> I acknowledge that Drivers On Deck Recruiting does not guarantee employment and final hiring decisions belong to the carrier/client.</label><p class="disclaimer" data-disclaimer></p></fieldset>
+        <button class="button primary" type="submit">Submit Driver Interest Form</button>
+      </form>
+      <aside class="side-note"><h3>Driver note</h3><p>We help connect drivers with carriers that are hiring for direct-hire roles. We do not guarantee a job.</p><p>The carrier handles official hiring steps and makes the final decision.</p></aside>
+    </section>
+  </main>
+  <footer class="footer"><div class="footer-inner"><div><strong>Drivers On Deck Recruiting</strong><p>Empty seats don’t pay. We help fill them.</p></div><p data-disclaimer></p></div></footer>
+</body>
+</html>

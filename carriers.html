@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Request CDL Drivers | Drivers On Deck Recruiting</title><link rel="stylesheet" href="assets/styles.css?v=20260601-payments"><script defer src="assets/app.js?v=20260601-backend"></script></head>
+<body>
+  <header class="site-header"><nav class="nav"><a class="brand" href="index.html"><span class="brand-mark"><img src="assets/drivers-on-deck-logo.png" alt="Drivers On Deck Recruiting logo"></span><span>Drivers On Deck Recruiting</span></a><button class="menu-button" data-menu-button>Menu</button><div class="nav-links" data-nav-links><a href="services.html">Services</a><a href="pricing.html">Pricing</a><a href="payments.html">Pay Invoice</a><a href="carriers.html">For Carriers</a><a href="drivers.html">For Drivers</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="admin.html">Admin Login</a><a class="button primary" href="carriers.html">Request Drivers</a></div></nav></header>
+  <main>
+    <section class="page-title"><div class="section"><h1>Request CDL Drivers</h1><p>Tell us what seat you need filled: route, truck, pay, schedule, and anything else a good driver should know.</p></div></section>
+    <section class="section form-shell">
+      <form data-lead-form="carrier">
+        <div class="success" tabindex="-1">Thanks. Your request is in. We’ll follow up to learn more about the seat you need filled.</div>
+        <fieldset><legend>Company Contact</legend><div class="form-grid">
+          <label class="field">Company legal name<input required name="company_legal_name"></label>
+          <label class="field">DBA name<input name="dba_name"></label>
+          <label class="field">Contact person<input required name="contact_person"></label>
+          <label class="field">Contact title<input required name="contact_title"></label>
+          <label class="field">Phone<input required type="tel" name="phone"></label>
+          <label class="field">Email<input required type="email" name="email"></label>
+          <label class="field full">Billing address<textarea required name="billing_address"></textarea></label>
+          <label class="field">DOT number<input name="dot_number"></label>
+          <label class="field">MC number<input name="mc_number"></label>
+        </div></fieldset>
+        <fieldset><legend>Hiring Need</legend><div class="form-grid">
+          <label class="field">Type of driver needed<select required name="driver_type_needed"><option value="">Select</option><option>Class A</option><option>Class B</option><option>Owner-Operator</option><option>Other</option></select></label>
+          <label class="field">Route type<select required name="route_type"><option value="">Select</option><option>Local</option><option>Regional</option><option>Dedicated</option><option>OTR</option></select></label>
+          <label class="field">Home time<select required name="home_time"><option value="">Select</option><option>Home daily</option><option>Home weekly</option><option>Other</option></select></label>
+          <label class="field">Number of openings<input required type="number" min="1" name="number_of_openings"></label>
+          <label class="field">Desired start date<input required type="date" name="desired_start_date"></label>
+          <label class="field">Pay structure<select required name="pay_structure"><option value="">Select</option><option>Hourly</option><option>Daily</option><option>CPM</option><option>Percentage</option><option>Salary</option><option>Other</option></select></label>
+          <label class="field">Estimated pay range<input required name="estimated_pay_range" placeholder="$25/hr or $1,800/wk"></label>
+          <label class="field">W-2 or 1099<select required name="employment_type"><option value="">Select</option><option>W-2</option><option>1099</option></select></label>
+        </div></fieldset>
+        <fieldset><legend>Equipment and Requirements</legend><div class="form-grid">
+          <label class="field">Equipment type<select required name="equipment_type"><option value="">Select</option><option>Dump</option><option>Flatbed</option><option>Dry Van</option><option>Reefer</option><option>Tanker</option><option>Container</option><option>Hotshot</option><option>Box Truck</option><option>Other</option></select></label>
+          <label class="field">Transmission<select required name="transmission_type"><option value="">Select</option><option>Automatic</option><option>Manual</option><option>Either</option></select></label>
+          <label class="field full">Required endorsements<div class="checks"><label class="check"><input type="checkbox" name="required_endorsements" value="Hazmat"> Hazmat</label><label class="check"><input type="checkbox" name="required_endorsements" value="Tanker"> Tanker</label><label class="check"><input type="checkbox" name="required_endorsements" value="Doubles/Triples"> Doubles/Triples</label><label class="check"><input type="checkbox" name="required_endorsements" value="Passenger"> Passenger</label><label class="check"><input type="checkbox" name="required_endorsements" value="TWIC"> TWIC</label><label class="check"><input type="checkbox" name="required_endorsements" value="None"> None</label><label class="check"><input type="checkbox" name="required_endorsements" value="Other"> Other</label></div></label>
+          <label class="field">Minimum years of experience<input required name="minimum_years_experience"></label>
+          <label class="field full">Acceptable accident/violation limits<textarea required name="acceptable_accident_violation_limits"></textarea></label>
+          <label class="field full">Drug testing/background process notes<textarea required name="background_process_notes"></textarea></label>
+          <label class="field">Who makes final hiring decision?<input required name="final_hiring_decision_person"></label>
+          <label class="field full">Additional job details<textarea name="additional_job_details"></textarea></label>
+        </div></fieldset>
+        <fieldset><legend>Consent</legend><label class="check"><input required type="checkbox" name="compliance_acknowledgment"> I acknowledge that the carrier/client is responsible for final hiring decisions, background checks, MVR checks, drug testing, Clearinghouse queries, and driver qualification file requirements.</label><p class="disclaimer" data-disclaimer></p></fieldset>
+        <button class="button primary" type="submit">Submit Carrier Request</button>
+      </form>
+      <aside class="side-note"><h3>What happens next</h3><p>We review the details, ask any follow-up questions, and start matching the role with drivers who fit.</p><p>Your team makes the final hiring decision and completes official qualification requirements.</p></aside>
+    </section>
+  </main>
+  <footer class="footer"><div class="footer-inner"><div><strong>Drivers On Deck Recruiting</strong><p>Empty seats don’t pay. We help fill them.</p></div><p data-disclaimer></p></div></footer>
+</body>
+</html>

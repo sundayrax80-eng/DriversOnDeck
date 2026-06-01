@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Admin Dashboard | Drivers On Deck Recruiting</title><link rel="stylesheet" href="assets/styles.css?v=20260601-payments"><script defer src="assets/app.js?v=20260601-backend"></script></head>
+<body>
+  <header class="site-header"><nav class="nav"><a class="brand" href="index.html"><span class="brand-mark"><img src="assets/drivers-on-deck-logo.png" alt="Drivers On Deck Recruiting logo"></span><span>Drivers On Deck Recruiting</span></a><button class="menu-button" data-menu-button>Menu</button><div class="nav-links" data-nav-links><a href="services.html">Services</a><a href="pricing.html">Pricing</a><a href="payments.html">Pay Invoice</a><a href="carriers.html">For Carriers</a><a href="drivers.html">For Drivers</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="admin.html">Admin Login</a><a class="button primary" href="carriers.html">Request Drivers</a></div></nav></header>
+  <main data-admin-root data-view="overview">
+    <section class="page-title"><div class="section"><h1>Admin Dashboard</h1><p>View, filter, and manage driver leads, carrier leads, job orders, placements, and follow-up tasks.</p></div></section>
+    <section class="section">
+      <form data-admin-login><fieldset><legend>Admin Login</legend><div class="form-grid"><label class="field">Admin email<input type="email" name="email" placeholder="you@driversondeckrecruiting.com"></label><label class="field">Password<input required type="password" name="password" placeholder="Password"></label></div><p class="hint">Production uses Supabase Auth with an email listed in ADMIN_EMAILS. For local static preview, leave email blank and use the demo password in README.md.</p></fieldset><button class="button primary" type="submit">Log In</button></form>
+      <div class="admin-layout hidden" data-admin-app>
+        <aside class="admin-nav">
+          <button data-admin-view="overview" class="active">Overview</button>
+          <button data-admin-view="drivers">Driver Leads</button>
+          <button data-admin-view="carriers">Carrier Leads</button>
+          <button data-admin-view="jobs">Job Orders</button>
+          <button data-admin-view="placements">Placements</button>
+          <button data-admin-logout>Log Out</button>
+        </aside>
+        <section data-admin-panel></section>
+      </div>
+    </section>
+  </main>
+  <footer class="footer"><div class="footer-inner"><div><strong>Drivers On Deck Recruiting</strong><p>Empty seats don’t pay. We help fill them.</p></div><p data-disclaimer></p></div></footer>
+</body>
+</html>
