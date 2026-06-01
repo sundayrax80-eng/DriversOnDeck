@@ -1,5 +1,4 @@
 const { json, parseBody, handleOptions } = require("./_shared/http");
-const { supabaseAdmin, sendMail } = require("./_shared/services");
 const { asArray, pick, required } = require("./_shared/format");
 
 const driverKeys = [
@@ -18,7 +17,7 @@ const carrierKeys = [
   "final_hiring_decision_person", "additional_job_details"
 ];
 
-const requiredEnv = ["SUPABASE_URL", "SUPABASE_SERVICE_ROLE_KEY"];
+const requiredEnv = ["SUPABASE_URL"];
 
 function serializeError(error) {
   return {
@@ -31,53 +30,129 @@ function serializeError(error) {
   };
 }
 
+function logError(message, details = {}) {
+  console.error(message, {
+    function: "submit-lead",
+    ...details
+  });
+}
+
 function fail(statusCode, message) {
   const error = new Error(message);
   error.statusCode = statusCode;
   return error;
 }
 
-function checkEnv() {
+function getSupabaseConfig() {
   const missing = requiredEnv.filter((name) => !process.env[name]);
   if (missing.length) {
     throw fail(500, `Server is missing required environment variable(s): ${missing.join(", ")}`);
   }
+
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY;
+  if (!serviceKey) {
+    throw fail(500, "Server is missing required environment variable: SUPABASE_SERVICE_ROLE_KEY");
+  }
+
+  let url;
+  try {
+    url = new URL(process.env.SUPABASE_URL);
+  } catch {
+    throw fail(500, "SUPABASE_URL must be a valid URL");
+  }
+
+  if (!/^https:$/.test(url.protocol)) {
+    throw fail(500, "SUPABASE_URL must start with https://");
+  }
+
+  return {
+    restUrl: `${url.origin}/rest/v1`,
+    serviceKey,
+    keySource: process.env.SUPABASE_SERVICE_ROLE_KEY ? "SUPABASE_SERVICE_ROLE_KEY" : "SUPABASE_SECRET_KEY"
+  };
 }
 
-async function insertSingle(db, table, payload, label) {
+async function insertSingle(config, table, payload, label) {
+  if (typeof fetch !== "function") {
+    throw fail(500, "Netlify runtime fetch API is unavailable. Set the Netlify runtime to Node 18 or newer.");
+  }
+
+  const url = `${config.restUrl}/${encodeURIComponent(table)}?select=*`;
+
   try {
-    const { data, error } = await db.from(table).insert(payload).select("*").single();
-    if (error) {
-      console.error("submit-lead Supabase insert returned an error", {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        apikey: config.serviceKey,
+        Authorization: `Bearer ${config.serviceKey}`,
+        "Content-Type": "application/json",
+        Prefer: "return=representation"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const responseText = await response.text();
+    let responseBody = null;
+    try {
+      responseBody = responseText ? JSON.parse(responseText) : null;
+    } catch {
+      responseBody = { raw: responseText.slice(0, 500) };
+    }
+
+    if (!response.ok) {
+      logError("submit-lead Supabase REST insert returned an error", {
         table,
         label,
-        error: serializeError(error)
+        status: response.status,
+        statusText: response.statusText,
+        supabaseError: responseBody
       });
-      throw error;
+      const message = responseBody?.message || responseBody?.error || response.statusText || "Supabase insert failed";
+      throw fail(500, `Supabase rejected ${label}: ${message}`);
     }
-    return data;
+
+    const rows = Array.isArray(responseBody) ? responseBody : [];
+    if (!rows[0]) {
+      logError("submit-lead Supabase REST insert returned no row", { table, label, responseBody });
+      throw fail(500, `Supabase saved ${label} but did not return a row`);
+    }
+
+    return rows[0];
   } catch (error) {
-    console.error("submit-lead Supabase insert failed", {
+    if (error.statusCode) throw error;
+
+    logError("submit-lead Supabase REST insert failed before receiving a response", {
       table,
       label,
       error: serializeError(error)
     });
-    throw fail(502, `Supabase insert failed for ${label}: ${error.message || "Unknown database error"}`);
+    throw fail(503, `Could not reach Supabase while saving ${label}: ${error.message || "Unknown database error"}`);
   }
 }
 
 async function sendLeadEmail(email) {
   try {
-    const result = await sendMail(email);
-    if (result?.skipped) {
+    if (!process.env.RESEND_API_KEY || !email.to) {
       console.info("submit-lead email skipped", {
+        function: "submit-lead",
         subject: email.subject,
         reason: !process.env.RESEND_API_KEY ? "Missing RESEND_API_KEY" : "Missing recipient"
       });
+      return { skipped: true };
     }
+
+    const { Resend } = require("resend");
+    const resend = new Resend(process.env.RESEND_API_KEY);
+    const result = await resend.emails.send({
+      from: process.env.FROM_EMAIL || "Drivers On Deck Recruiting <onboarding@resend.dev>",
+      to: email.to,
+      subject: email.subject,
+      html: email.html,
+      text: email.text
+    });
     return result;
   } catch (error) {
-    console.error("submit-lead email failed but lead was saved", {
+    logError("submit-lead email failed but lead was saved", {
       to: email.to,
       subject: email.subject,
       error: serializeError(error)
@@ -92,11 +167,16 @@ exports.handler = async (event) => {
   if (event.httpMethod !== "POST") return json(405, { error: "Method not allowed" });
 
   try {
-    checkEnv();
+    const supabaseConfig = getSupabaseConfig();
+    console.info("submit-lead starting request", {
+      function: "submit-lead",
+      type: event.body ? "body-present" : "body-empty",
+      supabaseKeySource: supabaseConfig.keySource
+    });
+
     const body = parseBody(event);
     const type = body.type;
     const data = body.data || {};
-    const db = supabaseAdmin();
 
     if (type === "driver") {
       required(data, ["full_name", "phone", "email", "city", "state", "zip", "cdl_class", "cdl_state"]);
@@ -109,7 +189,7 @@ exports.handler = async (event) => {
       };
       if (!payload.consent_to_share) return json(400, { error: "Driver consent is required" });
 
-      const row = await insertSingle(db, "driver_leads", payload, "driver lead");
+      const row = await insertSingle(supabaseConfig, "driver_leads", payload, "driver lead");
 
       const adminEmail = await sendLeadEmail({
         to: process.env.ADMIN_NOTIFICATION_EMAIL,
@@ -138,7 +218,7 @@ exports.handler = async (event) => {
       };
       if (!payload.compliance_acknowledgment) return json(400, { error: "Carrier acknowledgment is required" });
 
-      const row = await insertSingle(db, "carrier_leads", payload, "carrier lead");
+      const row = await insertSingle(supabaseConfig, "carrier_leads", payload, "carrier lead");
 
       const jobPayload = {
         carrier_id: row.id,
@@ -153,7 +233,7 @@ exports.handler = async (event) => {
         start_date: row.desired_start_date,
         status: "open"
       };
-      const jobOrder = await insertSingle(db, "job_orders", jobPayload, "job order");
+      const jobOrder = await insertSingle(supabaseConfig, "job_orders", jobPayload, "job order");
 
       const adminEmail = await sendLeadEmail({
         to: process.env.ADMIN_NOTIFICATION_EMAIL,
@@ -173,7 +253,7 @@ exports.handler = async (event) => {
 
     return json(400, { error: "Unsupported lead type" });
   } catch (error) {
-    console.error("submit-lead failed", { error: serializeError(error) });
+    logError("submit-lead failed", { error: serializeError(error) });
     return json(error.statusCode || 500, {
       error: error.message || "Lead submission failed",
       function: "submit-lead"
